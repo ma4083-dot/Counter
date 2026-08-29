@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>عدّاد فرحتنا 💍</title>
+<meta name="description" content="عدّاد مشترك للحظات فرحتنا — من يوم الخطوبة لحد يوم الفرح">
+<meta name="theme-color" content="#e0568c">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+  :root{
+    --bg:#fdf1f5;
+    --card:#ffffff;
+    --text:#3d2230;
+    --sub:#7a4a5c;
+    --accent:#e0568c;
+    --accent2:#f7a8c4;
+    --border:#f6dbe6;
+    --danger:#c23763;
+    --shadow: 0 8px 28px rgba(90,20,50,0.18);
+    --glass: rgba(255,255,255,0.30);
+    --glass-soft: rgba(255,255,255,0.18);
+    --glass-border: rgba(255,255,255,0.55);
+  }
+  [data-theme="dark"]{
+    --bg:#1a0d13;
+    --card:#2e1a24;
+    --text:#fdf1f6;
+    --sub:#e6b9cd;
+    --accent:#f472b6;
+    --accent2:#f9a8d4;
+    --border:#432430;
+    --danger:#f87171;
+    --shadow: 0 8px 28px rgba(0,0,0,0.5);
+    --glass: rgba(30,10,20,0.32);
+    --glass-soft: rgba(30,10,20,0.20);
+    --glass-border: rgba(255,255,255,0.18);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Segoe UI', Tahoma, Arial, sans-serif;
+    min-height:100vh;
+    transition:background .25s, color .25s;
+    padding-bottom:40px;
+    position:relative;
+  }
+  /* خلفية صورة اختيارية — لو الملف background.jpg موجود، هتظهر تلقائي خلف المحتوى */
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:url('background.jpg');
+    background-size:cover;
+    background-position:center;
+    background-attachment:fixed;
+    z-index:0;
+  }
+  body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:var(--bg);
+    opacity:.22;
+    z-index:0;
+  }
+  header, #installBtnWrap, .tagline-wrap, main{
+    position:relative;
+    z-index:1;
+  }
+  .tagline-wrap{
+    text-align:center;
+    margin:-4px 0 14px;
+  }
+  .tagline{
+    display:inline-block;
+    margin:0;
+    font-family: 'Brush Script MT', 'Segoe Script', cursive;
+    font-style:italic;
+    font-size:1.15rem;
+    letter-spacing:.5px;
+    color:var(--accent);
+    direction:ltr;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+  header{
+    padding:18px 16px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    max-width:720px;
+    margin:0 auto;
+  }
+  header h1{
+    font-size:1.25rem;
+    margin:0;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+  header h1 span.emoji{font-size:1.4rem;}
+  #themeBtn{
+    background:var(--glass);
+    backdrop-filter: saturate(115%);
+    -webkit-backdrop-filter: saturate(115%);
+    border:1px solid var(--glass-border);
+    color:var(--text);
+    border-radius:12px;
+    width:42px;height:42px;
+    font-size:1.1rem;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+  }
+  main{
+    max-width:720px;
+    margin:0 auto;
+    padding:0 16px;
+  }
+  .card{
+    background:var(--glass);
+    backdrop-filter: saturate(115%);
+    -webkit-backdrop-filter: saturate(115%);
+    border-radius:18px;
+    padding:18px;
+    box-shadow:var(--shadow);
+    margin-bottom:18px;
+    border:1px solid var(--glass-border);
+  }
+  .card h2{
+    font-size:1rem;
+    margin:0 0 14px;
+    color:var(--sub);
+    font-weight:600;
+  }
+  label{
+    font-size:.85rem;
+    color:var(--sub);
+    display:block;
+    margin-bottom:6px;
+  }
+  input[type="text"], input[type="date"], input[type="time"], input[type="datetime-local"]{
+    width:100%;
+    padding:11px 12px;
+    border-radius:12px;
+    border:1px solid var(--glass-border);
+    background:var(--glass-soft);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color:var(--text);
+    font-size:1rem;
+    font-family:inherit;
+  }
+  input:focus{outline:2px solid var(--accent); outline-offset:1px;}
+  .row{display:flex; gap:10px; margin-bottom:12px;}
+  .row > div{flex:1;}
+  .btn{
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#fff;
+    border:none;
+    padding:12px 18px;
+    border-radius:12px;
+    font-size:.95rem;
+    font-weight:600;
+    cursor:pointer;
+    width:100%;
+  }
+  .btn:active{opacity:.85;}
+  .btn.secondary{
+    background:var(--glass-soft);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    color:var(--text);
+    border:1px solid var(--glass-border);
+  }
+  .btn-row{display:flex; gap:10px;}
+  .btn-row .btn{flex:1;}
+
+  .mode-toggle{
+    display:flex;
+    background:var(--glass-soft);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius:12px;
+    padding:4px;
+    margin-bottom:14px;
+    border:1px solid var(--glass-border);
+  }
+  .mode-toggle button{
+    flex:1;
+    padding:9px;
+    border:none;
+    background:transparent;
+    color:var(--sub);
+    border-radius:9px;
+    font-size:.85rem;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .mode-toggle button.active{
+    background:var(--accent);
+    color:#fff;
+    font-weight:600;
+  }
+
+  .result-box{
+    text-align:center;
+    padding:16px 10px;
+    border-radius:14px;
+    background:linear-gradient(135deg, rgba(224,86,140,.14), rgba(247,168,196,.14));
+    margin-top:4px;
+  }
+  .result-box .headline{
+    font-size:1rem;
+    color:var(--sub);
+    margin-bottom:10px;
+  }
+  .units{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+  }
+  .units .u{
+    background:var(--glass-soft);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius:10px;
+    padding:10px 4px;
+    border:1px solid var(--glass-border);
+  }
+  .units .u b{
+    display:block;
+    font-size:1.3rem;
+    color:var(--accent);
+  }
+  .units .u span{
+    font-size:.72rem;
+    color:var(--sub);
+  }
+  .direction-tag{
+    display:inline-block;
+    margin-top:10px;
+    font-size:.8rem;
+    padding:4px 10px;
+    border-radius:20px;
+    background:var(--accent);
+    color:#fff;
+  }
+
+  #pinnedList{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .pin-card{
+    background:var(--glass-soft);
+    backdrop-filter: saturate(115%);
+    -webkit-backdrop-filter: saturate(115%);
+    border:1px solid var(--glass-border);
+    border-radius:14px;
+    padding:14px;
+    position:relative;
+  }
+  .pin-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .pin-name{
+    font-weight:700;
+    font-size:1.02rem;
+  }
+  .pin-date{
+    font-size:.78rem;
+    color:var(--sub);
+    margin-top:2px;
+  }
+  .pin-actions{
+    display:flex;
+    gap:6px;
+  }
+  .icon-btn{
+    background:var(--glass-soft);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border:1px solid var(--glass-border);
+    border-radius:9px;
+    width:32px;height:32px;
+    font-size:.9rem;
+    cursor:pointer;
+    color:var(--text);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .icon-btn.del{color:var(--danger);}
+  .pin-elapsed{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin-top:8px;
+  }
+  .pin-elapsed .u{
+    text-align:center;
+    background:var(--glass-soft);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius:8px;
+    padding:7px 2px;
+    border:1px solid var(--glass-border);
+  }
+  .pin-elapsed .u b{
+    display:block;
+    font-size:1rem;
+    color:var(--accent);
+  }
+  .pin-elapsed .u span{
+    font-size:.65rem;
+    color:var(--sub);
+  }
+  .empty-msg{
+    text-align:center;
+    color:var(--sub);
+    padding:20px 10px;
+    font-size:.9rem;
+  }
+  footer{
+    text-align:center;
+    color:var(--sub);
+    font-size:.75rem;
+    padding:20px 10px 0;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  }
+  #installBtnWrap{
+    max-width:720px;
+    margin:0 auto;
+    padding:0 16px;
+  }
+  #installBtn{
+    display:none;
+  }
+  .sync-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:var(--glass);
+    backdrop-filter: saturate(115%);
+    -webkit-backdrop-filter: saturate(115%);
+    border:1px solid var(--glass-border);
+    border-radius:12px;
+    padding:10px 14px;
+    margin-bottom:10px;
+    font-size:.82rem;
+    color:var(--sub);
+    box-shadow:var(--shadow);
+  }
+  .sync-status .dot{
+    width:9px;height:9px;
+    border-radius:50%;
+    background:#f59e0b;
+    flex-shrink:0;
+  }
+  .sync-status.online .dot{ background:#22c55e; }
+  .sync-status.offline .dot{ background:#9ca3af; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="emoji">💍</span> عدّاد فرحتنا</h1>
+  <button id="themeBtn" title="تبديل الوضع الليلي">🌙</button>
+</header>
+<div class="tagline-wrap">
+  <p class="tagline">My Past, Present, and Future</p>
+</div>
+
+<div id="installBtnWrap">
+  <div id="syncStatus" class="sync-status">
+    <span id="syncDot" class="dot"></span>
+    <span id="syncText">بيتصل بالمزامنة...</span>
+  </div>
+  <button id="installBtn" class="btn secondary">📲 تثبيت التطبيق على الجهاز</button>
+</div>
+
+<main>
+
+  <!-- حاسبة سريعة -->
+  <div class="card">
+    <h2>احسب من تاريخ لأي وقت</h2>
+
+    <div class="row">
+      <div>
+        <label>التاريخ</label>
+        <input type="date" id="calcDate">
+      </div>
+      <div>
+        <label>الساعة (اختياري)</label>
+        <input type="time" id="calcTime">
+      </div>
+    </div>
+
+    <div class="mode-toggle">
+      <button id="modeNow" class="active">لحد دلوقتي</button>
+      <button id="modeCustom">لحد وقت تاني</button>
+    </div>
+
+    <div id="customTargetWrap" style="display:none; margin-bottom:12px;">
+      <label>التاريخ والوقت المستهدف</label>
+      <input type="datetime-local" id="targetDateTime">
+    </div>
+
+    <div class="result-box" id="calcResult">
+      <div class="headline">اختار تاريخ عشان تشوف الفرق</div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label for="pinName">اسم للتاريخ ده (لو عايز تثبّته)</label>
+      <div class="btn-row">
+        <input type="text" id="pinName" placeholder="مثال: عيد ميلادي، تاريخ التعيين...">
+        <button class="btn" id="pinBtn" style="width:auto; white-space:nowrap;">📌 ثبّت</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- التواريخ المثبتة -->
+  <div class="card">
+    <h2>📌 التواريخ المثبتة</h2>
+    <div id="pinnedList">
+      <div class="empty-msg">مفيش تواريخ مثبتة لسه — ثبّت أول تاريخ من فوق</div>
+    </div>
+  </div>
+
+  <footer>يشتغل أونلاين وأوفلاين — التواريخ المثبتة متزامنة بينكم لحظة بلحظة 💞</footer>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+/* ============ إعدادات عامة ============ */
+const LS_KEY = 'time_counter_pins_v1_shared';
+const THEME_KEY = 'time_counter_theme_v1';
+
+/* ============ الوضع الليلي ============ */
+const themeBtn = document.getElementById('themeBtn');
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = t === 'dark' ? '☀️' : '🌙';
+}
+let savedTheme = localStorage.getItem(THEME_KEY);
+if(!savedTheme){
+  savedTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+applyTheme(savedTheme);
+themeBtn.addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+  localStorage.setItem(THEME_KEY, next);
+});
+
+/* ============ أدوات حساب الفرق الزمني ============ */
+// فرق دقيق بالسنة/الشهر/اليوم/الساعة/الدقيقة/الثانية بين تاريخين
+function diffParts(from, to){
+  let future = to >= from;
+  let start = future ? from : to;
+  let end = future ? to : from;
+
+  let years = end.getFullYear() - start.getFullYear();
+  let months = end.getMonth() - start.getMonth();
+  let days = end.getDate() - start.getDate();
+  let hours = end.getHours() - start.getHours();
+  let minutes = end.getMinutes() - start.getMinutes();
+  let seconds = end.getSeconds() - start.getSeconds();
+
+  if(seconds < 0){ seconds += 60; minutes--; }
+  if(minutes < 0){ minutes += 60; hours--; }
+  if(hours < 0){ hours += 24; days--; }
+  if(days < 0){
+    const prevMonth = new Date(end.getFullYear(), end.getMonth(), 0);
+    days += prevMonth.getDate();
+    months--;
+  }
+  if(months < 0){ months += 12; years--; }
+
+  const totalDays = Math.floor((end - start) / (1000*60*60*24));
+
+  return { years, months, days, hours, minutes, seconds, totalDays, future };
+}
+
+function fmtDate(d){
+  return d.toLocaleDateString('ar-EG', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+}
+
+/* ============ الحاسبة السريعة ============ */
+const calcDate = document.getElementById('calcDate');
+const calcTime = document.getElementById('calcTime');
+const modeNow = document.getElementById('modeNow');
+const modeCustom = document.getElementById('modeCustom');
+const customTargetWrap = document.getElementById('customTargetWrap');
+const targetDateTime = document.getElementById('targetDateTime');
+const calcResult = document.getElementById('calcResult');
+const pinBtn = document.getElementById('pinBtn');
+const pinName = document.getElementById('pinName');
+
+let calcMode = 'now'; // 'now' | 'custom'
+
+modeNow.addEventListener('click', ()=>{
+  calcMode = 'now';
+  modeNow.classList.add('active');
+  modeCustom.classList.remove('active');
+  customTargetWrap.style.display = 'none';
+  renderCalc();
+});
+modeCustom.addEventListener('click', ()=>{
+  calcMode = 'custom';
+  modeCustom.classList.add('active');
+  modeNow.classList.remove('active');
+  customTargetWrap.style.display = 'block';
+  renderCalc();
+});
+
+function getCalcSourceDate(){
+  if(!calcDate.value) return null;
+  const t = calcTime.value || '00:00';
+  return new Date(`${calcDate.value}T${t}:00`);
+}
+
+function getCalcTargetDate(){
+  if(calcMode === 'now') return new Date();
+  if(!targetDateTime.value) return null;
+  return new Date(targetDateTime.value);
+}
+
+function renderCalc(){
+  const src = getCalcSourceDate();
+  const target = getCalcTargetDate();
+
+  if(!src || !target || isNaN(src) || isNaN(target)){
+    calcResult.innerHTML = `<div class="headline">اختار تاريخ عشان تشوف الفرق</div>`;
+    return;
+  }
+
+  const d = diffParts(src, target);
+  const dirLabel = d.future ? 'مضى' : 'متبقّي';
+
+  calcResult.innerHTML = `
+    <div class="headline">${fmtDate(src)}</div>
+    <div class="units">
+      <div class="u"><b>${d.years}</b><span>سنة</span></div>
+      <div class="u"><b>${d.months}</b><span>شهر</span></div>
+      <div class="u"><b>${d.days}</b><span>يوم</span></div>
+      <div class="u"><b>${d.hours}</b><span>ساعة</span></div>
+    </div>
+    <div class="units" style="margin-top:6px;">
+      <div class="u"><b>${d.minutes}</b><span>دقيقة</span></div>
+      <div class="u"><b>${d.seconds}</b><span>ثانية</span></div>
+      <div class="u"><b>${d.totalDays}</b><span>إجمالي أيام</span></div>
+      <div class="u"><b>${dirLabel}</b><span>الحالة</span></div>
+    </div>
+  `;
+}
+
+[calcDate, calcTime, targetDateTime].forEach(el=>{
+  el.addEventListener('input', renderCalc);
+});
+
+// تاريخ اليوم افتراضيًا في حقل التاريخ المستهدف المخصص (وقت الآن)
+(function initDefaults(){
+  const now = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  targetDateTime.value = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+})();
+
+/* ============ التثبيت (Pins) — متزامن عبر Firebase ============ */
+const firebaseConfig = {
+  apiKey: "AIzaSyB_lQwWAZMxpc9BxYH9tTy8aMRzpsL5u40",
+  authDomain: "counter-95f12.firebaseapp.com",
+  databaseURL: "https://counter-95f12-default-rtdb.firebaseio.com",
+  projectId: "counter-95f12",
+  storageBucket: "counter-95f12.firebasestorage.app",
+  messagingSenderId: "884328642310",
+  appId: "1:884328642310:web:e8e328143542d1bb3e1087"
+};
+
+let pinsRef = null;
+let firebaseReady = false;
+let currentPins = [];
+
+const syncStatus = document.getElementById('syncStatus');
+const syncDot = document.getElementById('syncDot');
+const syncText = document.getElementById('syncText');
+
+function setSyncState(state, text){
+  syncStatus.classList.remove('online','offline');
+  if(state) syncStatus.classList.add(state);
+  syncText.textContent = text;
+}
+
+function loadCachedPins(){
+  try{
+    return JSON.parse(localStorage.getItem(LS_KEY)) || [];
+  }catch(e){ return []; }
+}
+function cachePins(pins){
+  localStorage.setItem(LS_KEY, JSON.stringify(pins));
+}
+
+// عرض فوري من الكاش المحلي (يشتغل حتى قبل ما يتصل بالنت)
+currentPins = loadCachedPins();
+
+try{
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+  pinsRef = db.ref('pins');
+
+  db.ref('.info/connected').on('value', (snap)=>{
+    if(snap.val() === true){
+      firebaseReady = true;
+      setSyncState('online', 'متزامن مع شريك حياتك 💞');
+    }else{
+      firebaseReady = false;
+      setSyncState('offline', 'غير متصل — بتشوف آخر نسخة محفوظة');
+    }
+  });
+
+  pinsRef.on('value', (snapshot)=>{
+    const val = snapshot.val() || {};
+    const pinsArr = Object.keys(val).map(id => ({ id, ...val[id] }));
+    pinsArr.sort((a,b) => (b.createdAt||0) - (a.createdAt||0));
+    currentPins = pinsArr;
+    cachePins(pinsArr);
+    renderPins();
+  });
+}catch(e){
+  setSyncState('offline', 'تعذّر الاتصال بالمزامنة');
+}
+
+pinBtn.addEventListener('click', ()=>{
+  const src = getCalcSourceDate();
+  if(!src || isNaN(src)){
+    alert('من فضلك اختار تاريخ الأول');
+    return;
+  }
+  if(!pinsRef || !firebaseReady){
+    alert('محتاج اتصال بالإنترنت عشان تثبّت تاريخ مشترك جديد');
+    return;
+  }
+  const name = pinName.value.trim() || 'بدون اسم';
+  const id = pinsRef.push().key;
+  pinsRef.child(id).set({
+    name,
+    iso: src.toISOString(),
+    createdAt: Date.now()
+  });
+  pinName.value = '';
+});
+
+function renderPins(){
+  const pins = currentPins;
+  const list = document.getElementById('pinnedList');
+
+  if(pins.length === 0){
+    list.innerHTML = `<div class="empty-msg">مفيش تواريخ مثبتة لسه — ثبّت أول تاريخ من فوق</div>`;
+    return;
+  }
+
+  list.innerHTML = pins.map(p => `
+    <div class="pin-card" data-id="${p.id}">
+      <div class="pin-top">
+        <div>
+          <div class="pin-name" data-role="name">${escapeHtml(p.name)}</div>
+          <div class="pin-date">${fmtDate(new Date(p.iso))}</div>
+        </div>
+        <div class="pin-actions">
+          <button class="icon-btn" data-action="rename" title="تغيير الاسم">✏️</button>
+          <button class="icon-btn del" data-action="delete" title="حذف">🗑️</button>
+        </div>
+      </div>
+      <div class="pin-elapsed" data-role="elapsed"></div>
+    </div>
+  `).join('');
+
+  list.querySelectorAll('.pin-card').forEach(card=>{
+    const id = card.dataset.id;
+    card.querySelector('[data-action="delete"]').addEventListener('click', ()=>{
+      if(!pinsRef || !firebaseReady){
+        alert('محتاج اتصال بالإنترنت عشان تحذف تاريخ مشترك');
+        return;
+      }
+      if(confirm('تحذف التاريخ ده؟ هيتحذف عند شريكك كمان')){
+        pinsRef.child(id).remove();
+      }
+    });
+    card.querySelector('[data-action="rename"]').addEventListener('click', ()=>{
+      if(!pinsRef || !firebaseReady){
+        alert('محتاج اتصال بالإنترنت عشان تعدّل اسم مشترك');
+        return;
+      }
+      const target = currentPins.find(p=>p.id===id);
+      const newName = prompt('الاسم الجديد:', target ? target.name : '');
+      if(newName !== null && newName.trim() !== ''){
+        pinsRef.child(id).update({ name: newName.trim() });
+      }
+    });
+  });
+
+  updatePinElapsed();
+}
+
+function updatePinElapsed(){
+  const pins = currentPins;
+  const now = new Date();
+  document.querySelectorAll('.pin-card').forEach(card=>{
+    const id = card.dataset.id;
+    const p = pins.find(x=>x.id===id);
+    if(!p) return;
+    const d = diffParts(new Date(p.iso), now);
+    const el = card.querySelector('[data-role="elapsed"]');
+    el.innerHTML = `
+      <div class="u"><b>${d.years}</b><span>سنة</span></div>
+      <div class="u"><b>${d.months}</b><span>شهر</span></div>
+      <div class="u"><b>${d.days}</b><span>يوم</span></div>
+      <div class="u"><b>${d.hours}</b><span>س:${String(d.minutes).padStart(2,'0')}:${String(d.seconds).padStart(2,'0')}</span></div>
+    `;
+  });
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+/* ============ تحديث تلقائي كل ثانية ============ */
+setInterval(()=>{
+  if(calcMode === 'now') renderCalc();
+  updatePinElapsed();
+}, 1000);
+
+/* ============ تحميل أولي ============ */
+renderPins();
+renderCalc();
+
+/* ============ تثبيت التطبيق PWA ============ */
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+window.addEventListener('beforeinstallprompt', (e)=>{
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = 'block';
+});
+installBtn.addEventListener('click', async ()=>{
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  installBtn.style.display = 'none';
+});
+window.addEventListener('appinstalled', ()=>{
+  installBtn.style.display = 'none';
+});
+
+/* ============ تسجيل Service Worker للعمل أوفلاين ============ */
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+</script>
+</body>
+</html>
